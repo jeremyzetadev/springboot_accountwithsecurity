@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <title>Registration Home</title>
+
+        <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+
+              rel="stylesheet">
+
+    </head>
+
+
+<body>
+
+
+<!-- create navigation bar ( header) -->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="container">
+
+        <div class="navbar-header">
+
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar"
+
+                    data-toggle="collapse" type="button">
+
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span
+
+                    class="icon-bar"></span> <span class="icon-bar"></span>
+
+            </button>
+
+            <a class="navbar-brand" th:href="@{/accounts}">Accounts</a>
+
+            <a class="navbar-brand" href='/transfers' id="menu-link-transfer">Transfer</a>
+
+            <a class="navbar-brand" href='/statements' id="menu-link-statements">E-Statements</a>
+
+            <a class="navbar-brand" href='/invoices' id="menu-link-invoices">Invoices</a>
+
+            <a class="navbar-brand" href="/profile" id="menu-link-profile">Profile</a>
+
+            <a class="navbar-brand" href="/users" id="menu-link-users" th:if="${isAdmin}">Users</a>
+
+            <a class="navbar-brand" href="/logs" id="menu-link-monitoring" th:if="${isAdmin}">Monitoring</a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar">
+
+            <ul class="nav navbar-nav">
+
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<br>
+
+<br>
+
+
+<div class="container">
+
+    <div class="row main-row-with-y-margins">
+
+        <div class="card-header teal" style="margin-top: 0;">
+
+            <h1>Transfer money</h1>
+
+        </div>
+
+        <div class="panel z-depth-1 white" style="margin-top: 0;">
+
+            <div class="row">
+
+                <form method="post" th:action="@{/transfer}" th:object="${transactionrequest}">
+
+                    <div class="row">
+
+                        <div class="col">
+
+                            <label for="SourceAccountNumber">Select your account</label>
+
+                            <select class="form-control" id="SourceAccountNumber" th:field="*{owner}">
+
+                                <div th:each="account : ${accounts}">
+
+                                    <option th:field="*{owner}" th:value="${account.accountNumber}">
+
+                                        <div th:text="${account.accountNumber}"></div>
+
+                                        <div th:text="${account.name}"></div>
+
+                                    </option>
+
+                                </div>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col ">
+
+                            <Label for="DestinationAccountNumber">Destination account number</Label>
+
+                            <input class="form-control" id="DestinationAccountNumber" th:field="*{destination}"/>
+
+                        </div>
+
+                    </div>
+
+                    <!-- inlcude csrf token -->
+
+                    <input name="${_csrf.parameterName}"
+
+                           type="hidden"
+
+                           value="${_csrf.token}"/>
+
+                    <div class="row">
+
+                        <div class="input-field col">
+
+                            <label for="amount">Amount</label>
+
+                            <input class="form-control" id="amount" step=".01" th:field="*{amount}" type="number"/>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="input-field col">
+
+                            <label or="Description">Description</label>
+
+                            <input class="form-control" id="Description" th:field="*{description}"/>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="input-field col"><input class="btn right  btn-primary" id="transfer-btn-submit"
+
+                                                            type="submit" value="Transfer"/></div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<th insert="Shared/footer.html"></th>

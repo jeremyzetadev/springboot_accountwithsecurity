@@ -1,0 +1,83 @@
+<div th:fragment="menu">
+
+
+    <!--@if (User.Identity.IsAuthenticated)-->
+
+    <!--{-->
+
+    <li id="menu-home">
+
+        <a href="/accounts" id="menu-link-home">Home</a>
+
+    </li>
+
+    <li id="menu-transfer">
+
+        <a href='/transfers' id="menu-link-transfer">Transfer</a>
+
+    </li>
+
+    <li id="menu-statements">
+
+        <a href='/statements' id="menu-link-statements">E-Statements</a>
+
+    </li>
+
+    <li id="menu-invoices">
+
+        <a href='/invoices' id="menu-link-invoices">Invoices</a>
+
+    </li>
+
+    <li id="menu-profile">
+
+        <a href="/profile" id="menu-link-profile">Profile</a>
+
+    </li>
+
+    <!--	@if (User.IsInRole("Admin"))-->
+
+    <!--	{-->
+
+    <li id="menu-users">
+
+        <a href="/users" id="menu-link-users">Users</a>
+
+    </li>
+
+    <!--	}-->
+
+    <!--	@if (User.IsInRole("Admin"))-->
+
+    <!--	{-->
+
+    <li id="menu-monitoring">
+
+        <a href="/logs" id="menu-link-monitoring">Monitoring</a>
+
+    </li>
+
+    <!--	}-->
+
+    <li id="menu-logout">
+
+        <a href="/logout" id="menu-link-logout">Logout</a>
+
+    </li>
+
+    <!--}-->
+
+    <!--else-->
+
+    <!--{-->
+
+    <li id="menu-login">
+
+        <a href="/login" id="menu-link-login">Login</a>
+
+    </li>
+
+    <!--}-->
+
+
+</div>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <title>Registration Home</title>
+
+        <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+
+              rel="stylesheet">
+
+    </head>
+
+
+<body>
+
+
+<!-- create navigation bar ( header) -->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="container">
+
+        <div class="navbar-header">
+
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar"
+
+                    data-toggle="collapse" type="button">
+
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span
+
+                    class="icon-bar"></span> <span class="icon-bar"></span>
+
+            </button>
+
+            <a class="navbar-brand" th:href="@{/accounts}">Accounts</a>
+
+            <a class="navbar-brand" href='/transfers' id="menu-link-transfer">Transfer</a>
+
+            <a class="navbar-brand" href='/statements' id="menu-link-statements">E-Statements</a>
+
+            <a class="navbar-brand" href='/invoices' id="menu-link-invoices">Invoices</a>
+
+            <a class="navbar-brand" href="/profile" id="menu-link-profile">Profile</a>
+
+            <a class="navbar-brand" href="/users" id="menu-link-users" th:if="${isAdmin}">Users</a>
+
+            <a class="navbar-brand" href="/logs" id="menu-link-monitoring" th:if="${isAdmin}">Monitoring</a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar">
+
+            <ul class="nav navbar-nav">
+
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<br>
+
+<br>
+
+<div class="container">
+
+    <div class="row">
+
+        <h2 th:text="${account.name}"></h2>
+
+        <div class="panel z-depth-1 white border-radius-bottom" style="margin-top: 0;">
+
+            <div class="row">
+
+                <form>
+
+                    <div class="row">
+
+                        <div class="input-field col s12">
+
+                            <input asp-for="SearchTerm" name="searchterm"/>
+
+                            <label asp-for="SearchTerm">Search term</label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="input-field col s12 no-margin-y">
+
+                        <input class="btn right" id="search-account-btn-submit" type="submit" value="Search"/>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="row">
+
+        <h2>Account details </h2>
+
+        <div class="panel z-depth-1 white" style="margin-top: 0;">
+
+            <p>
+
+                <b>Account Number:</b> <span th:text="${account.accountNumber}"></span>
+
+            </p>
+
+            <p>
+
+                <b>Balance:</b> <span th:text="${account.balance}"></span>
+
+            </p>
+
+        </div>
+
+        <div class="panel z-depth-1 white prevent-overflow border-radius-bottom" style="margin-top: 0;">
+
+            <div th:if="${account.transactions.size() == 0}"><p>Transactions could not be found!</p></div>
+
+            <table class="striped table table-hover">
+
+                <thead class="thead-light">
+
+                <tr>
+
+                    <th data-field="id" scope="col">ID</th>
+
+                    <th data-field="date" scope="col">Date</th>
+
+                    <th data-field="from" scope="col">From</th>
+
+                    <th data-field="to" scope="col">To</th>
+
+                    <th class="table-cell-break-all" data-field="description" scope="col">Description</th>
+
+                    <th ata-field="amount" dscope="col">Amount</th>
+
+                    <th></th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                <tr th:each="transaction: ${account.transactions}">
+
+                    <td th:text="${transaction.id}">/td>
+
+                    <td th:text="${transaction.timestamp}"></td>
+
+                    <div th:if="${transaction.amount < 0}">
+
+                        <td th:text="${transaction.ownerAccount.accountNumber}"></td>
+
+                        <td th:text="${transaction.foreignAccount.accountNumber}"></td>
+
+                    </div>
+
+                    <div th:else>
+
+                        <td th:text="${transaction.foreignAccount.accountNumber}"></td>
+
+                        <td th:text="${transaction.ownerAccount.accountNumber}"></td>
+
+                    </div>
+
+                    <td th:text="${transaction.description}"></td>
+
+                    <td th:text="${transaction.amount}"></td>
+
+                    <td>
+
+                        <a th:href="@{/accounts/{id}/transaction/{transactionId}(id=${account.id}, transactionId=${transaction.id})}">View</a>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <title>Registration Home</title>
+
+        <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+
+              rel="stylesheet">
+
+    </head>
+
+
+<body>
+
+
+<!-- create navigation bar ( header) -->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="container">
+
+        <div class="navbar-header">
+
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar"
+
+                    data-toggle="collapse" type="button">
+
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span
+
+                    class="icon-bar"></span> <span class="icon-bar"></span>
+
+            </button>
+
+            <a class="navbar-brand" th:href="@{/accounts}">Accounts</a>
+
+            <a class="navbar-brand" href='/transfers' id="menu-link-transfer">Transfer</a>
+
+            <a class="navbar-brand" href='/statements' id="menu-link-statements">E-Statements</a>
+
+            <a class="navbar-brand" href='/invoices' id="menu-link-invoices">Invoices</a>
+
+            <a class="navbar-brand" href="/profile" id="menu-link-profile">Profile</a>
+
+            <a class="navbar-brand" href="/users" id="menu-link-users" th:if="${isAdmin}">Users</a>
+
+            <a class="navbar-brand" href="/logs" id="menu-link-monitoring" th:if="${isAdmin}">Monitoring</a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar">
+
+            <ul class="nav navbar-nav">
+
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<br>
+
+<br>
+
+<div class="container" style="margin-top: 40px;">
+
+    <div class="row">
+
+        <div class="card">
+
+            <form>
+
+                <div class="row">
+
+                    <div class="col s12">
+
+                        <div class="input-append">
+
+                            <input class="span2 search-query" type="text">
+
+                            <button class="btn" type="submit">Search</button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="card-header teal">
+
+            <div>Sent Invoices <a th:href="@{/invoices/create}">Create</a>
+
+                </a></div>
+
+        </div>
+
+        <div class="panel z-depth-1 white prevent-overflow border-radius-bottom" style="margin-top: 0;">
+
+            <div th:if="${noSentInvoices}">
+
+                <p>No invoices could be retrieved.</p>
+
+            </div>
+
+            <table class="striped table table-hover">
+
+                <thead class="thead-light">
+
+                <tr>
+
+                    <th data-field="date" scope="col">Due date</th>
+
+                    <th data-field="date" scope="col">Buyer Account</th>
+
+                    <th data-field="amount" scope="col">Amount</th>
+
+                    <th data-field="paid" scope="col">Payment status</th>
+
+                    <th scope="col" style="width: 10%"></th>
+
+                    <th></th>
+
+                </tr>
+
+                </thead>
+
+                <tbody id="sent-invoices">
+
+                <tr th:each="invoice : ${sentinvoices}">
+
+                    <td th:text="${#dates.formatISO(invoice.dueDate)}"></td>
+
+                    <td th:text="${invoice.buyerAccount.accountNumber}"></td>
+
+                    <td th:text="${invoice.amount}"></td>
+
+                    <td>
+
+                        <div th:if="${invoice.paymentStatus}">Paid</div>
+
+                        <div th:if="${invoice.paymentStatus == false}"><p style="color: #ff0000; font-weight: bold">
+
+                            Unpaid</p></div>
+
+                    </td>
+
+                    <td><a th:href="@{/invoices/{id}(id=${invoice.id})}">View</a></a></td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="card-header teal">
+
+            <div>Received Invoices</div>
+
+        </div>
+
+
+        <div class="panel z-depth-1 white prevent-overflow border-radius-bottom" style="margin-top: 0;">
+
+            <div th:if="${noReceivedInvoices}">
+
+                <p>No invoices could be retrieved.</p>
+
+            </div>
+
+            <table class="striped table table-hover">
+
+                <thead class="thead-light">
+
+                <tr>
+
+                    <th data-field="date" scope="col">Due date</th>
+
+                    <th data-field="date" scope="col">Seller Account</th>
+
+                    <th data-field="amount" scope="col">Amount</th>
+
+                    <th data-field="paid" scope="col">Payment status</th>
+
+                    <th scope="col" style="width: 10%"></th>
+
+                    <th></th>
+
+                </tr>
+
+                </thead>
+
+                <tbody id="received-invoices">
+
+                <tr th:each="invoice : ${receivedInvoices}">
+
+                    <td th:text="${#dates.formatISO(invoice.dueDate)}"></td>
+
+                    <td th:text="${invoice.sellerAccount.accountNumber}"></td>
+
+                    <td th:text="${invoice.amount}"></td>
+
+                    <td th:if="${invoice.paymentStatus}">
+
+                        <div th:if="${invoice.paymentStatus}">Paid</div>
+
+                    </td>
+
+                    <td th:if="${invoice.paymentStatus} == false"><p style="color: #ff0000; font-weight: bold"
+
+                                                                     th:if="${invoice.paymentStatus} == false">
+
+                        Unpaid</p></td>
+
+                    <td th:if="${invoice.paymentStatus} == false"><a
+
+                            th:href="@{/invoices/{id}/payment(id=${invoice.id})}"
+
+                            th:if="${invoice.paymentStatus} == false">Pay</a>
+
+                        </a></td>
+
+                    <td th:if="${invoice.paymentStatus}">
+
+                        <a th:href="@{/invoices/{id}/paymentReceipt(id=${invoice.id})}">Receipt</a>
+
+                    </td>
+
+                    <td><a th:href="@{/invoices/{id}(id=${invoice.id})}" th:if="${invoice.paymentStatus}">View</a>
+
+                        </a></td>
+
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

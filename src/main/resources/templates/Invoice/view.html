@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <title>Registration Home</title>
+
+        <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+
+              rel="stylesheet">
+
+    </head>
+
+
+<body>
+
+
+<!-- create navigation bar ( header) -->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="container">
+
+        <div class="navbar-header">
+
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar"
+
+                    data-toggle="collapse" type="button">
+
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span
+
+                    class="icon-bar"></span> <span class="icon-bar"></span>
+
+            </button>
+
+            <a class="navbar-brand" th:href="@{/accounts}">Accounts</a>
+
+            <a class="navbar-brand" href='/transfers' id="menu-link-transfer">Transfer</a>
+
+            <a class="navbar-brand" href='/statements' id="menu-link-statements">E-Statements</a>
+
+            <a class="navbar-brand" href='/invoices' id="menu-link-invoices">Invoices</a>
+
+            <a class="navbar-brand" href="/profile" id="menu-link-profile">Profile</a>
+
+            <a class="navbar-brand" href="/users" id="menu-link-users" th:if="${isAdmin}">Users</a>
+
+            <a class="navbar-brand" href="/logs" id="menu-link-monitoring" th:if="${isAdmin}">Monitoring</a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar">
+
+            <ul class="nav navbar-nav">
+
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<br>
+
+<br>
+
+
+<!-- Payment reminder modal -->
+
+<div class="modal" id="modal">
+
+    <div class="modal-content">
+
+        <h4>Send reminder</h4>
+
+        <p>Would you like to send a reminder to
+
+        <div th:text="${invoice.buyerAccount.user.email}"></div>
+
+        </p>
+
+        <a href="">Yes</a>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="card-header teal">
+
+            <div class="row">
+
+                <h2>Invoice</h2>
+
+                <div class="col right">
+
+                    <div th:if="${invoice.paymentStatus} == false">
+
+                        <a class="btn create-invoice-button" th:href="@{/invoices/{id}/payment(id=${invoice.id})}"
+
+                           th:if="${isBuyer} ">
+
+                            Pay Invoice
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div th:if="${invoicenotfound}"><p>Invoice not found!</p></div>
+
+        <table class="table table-light">
+
+            <tbody>
+
+            <tr>
+
+                <td><strong>Invoice ID:</strong></td>
+
+                <td>
+
+                    <div th:text="${invoice.id}"></div>
+
+                </td>
+
+                <td><strong>Due date:</strong></td>
+
+                <td>
+
+                    <div th:text="${#dates.formatISO(invoice.dueDate)}"></div>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+        <h2 style="font-weight: bold;">Seller information:</h2>
+
+        <table class="table table-light">
+
+            <tbody>
+
+            <tr>
+
+                <td><strong>Email:</strong></td>
+
+                <td>
+
+                    <div th:text="${invoice.sellerAccount.user.email}"></div>
+
+                </td>
+
+                <td><strong>Account:</strong></td>
+
+                <td>
+
+                    <div th:text="${invoice.sellerAccount.accountNumber}"></div>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+        <h2 style="font-weight: bold;">Buyer information:</h2>
+
+        <table class="table table-light">
+
+            <tbody>
+
+            <tr>
+
+                <td><strong>Email:</strong></td>
+
+                <td>
+
+                    <div th:text="${invoice.buyerAccount.user.email}"></div>
+
+                </td>
+
+                <td><strong>Account:</strong></td>
+
+                <td>
+
+                    <div th:text="${invoice.buyerAccount.accountNumber}"></div>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+        <h2 style="font-weight: bold;">Details</h2>
+
+        <table class="table table-light">
+
+            <tbody>
+
+            <tr>
+
+                <td><strong>Description:</strong></td>
+
+                <td>
+
+                    <div th:text="${invoice.description}"></div>
+
+                </td>
+
+                <td><strong>Total Amount:</strong></td>
+
+                <td>
+
+                    <div th:text="${invoice.amount}"></div>
+
+                </td>
+
+                <td><strong>Payment Status</strong></td>
+
+                <td>
+
+                    <span th:if="${invoice.paymentStatus}">Paid</span>
+
+                    <span style="color:red; font-weight: bold" th:if="${invoice.paymentStatus} == false">Unpaid</span>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</div>
+
+

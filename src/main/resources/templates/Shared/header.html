@@ -1,0 +1,65 @@
+
+
+<!DOCTYPE html >
+
+<html lang="en" th:fragment="header"
+
+      xmlns:th="http://www.thymeleaf.org"> >
+
+<head>
+
+    <!--Import Google Icon Font-->
+
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+
+
+    <!--Let browser know website is optimized for mobile-->
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <link href="~/css/site.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+
+</head>
+
+
+<body>
+
+<nav>
+
+    <div class="nav-wrapper @navbarClassName" id="application-navbar">
+
+        <div class="custom-navbar-container @extraClassName">
+
+            <a class="custom-brand-logo @hasLoggedInClassName" href="/">AccountSystem</a>
+
+            <a class="sidenav-trigger" data-target="mobile-demo" href="#">
+
+                <i class="material-icons">menu</i>
+
+            </a>
+
+            <ul class="right">
+
+                <div th:insert="Shared/menu :: menu">...</div>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<ul class="sidenav" id="mobile-demo">
+
+    <div th:insert="Shared/menu :: menu">...</div>
+
+</ul>

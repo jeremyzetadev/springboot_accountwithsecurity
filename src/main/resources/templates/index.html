@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <title>Registration Home</title>
+
+        <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+
+              rel="stylesheet">
+
+    </head>
+
+
+<body>
+
+
+<!-- create navigation bar ( header) -->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="container">
+
+        <div class="navbar-header">
+
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar"
+
+                    data-toggle="collapse" type="button">
+
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span
+
+                    class="icon-bar"></span> <span class="icon-bar"></span>
+
+            </button>
+
+            <a class="navbar-brand" href="#" th:href="@{/accounts}">Accounts</a>
+
+            <a class="navbar-brand" href='/transfers' id="menu-link-transfer">Transfer</a>
+
+            <a class="navbar-brand" href='/statements' id="menu-link-statements">E-Statements</a>
+
+            <a class="navbar-brand" href='/invoices' id="menu-link-invoices">Invoices</a>
+
+            <a class="navbar-brand" href="/profile" id="menu-link-profile">Profile</a>
+
+
+            <a class="navbar-brand" href="/users" id="menu-link-users" th:if="${isAdmin}">Users</a>
+
+            <a class="navbar-brand" href="/logs" id="menu-link-monitoring" th:if="${isAdmin}">Monitoring</a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar">
+
+            <ul class="nav navbar-nav">
+
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<br>
+
+<br>
+
+
+<div class="container">
+
+    <h1>AccountSystem app</h1>
+
+    <br>
+
+    Welcome <span sec:authentication="principal.username"> User </span>
+
+    <div th:if="${config2FA}">
+
+        <p>
+
+            Scan this QR code to add this site to your 2FA authentication app. You'll need it to log in.
+
+        </p>
+
+        <p>
+
+            <img th:src="${twoFaQrUrl}"/>
+
+        </p>
+
+
+        <a th:href="@{/?twofa=true}">Remove this notion. I've configured it.</a>
+
+    </div>
+
+</div>
+
+
+
+</body>
+
+
+</html>

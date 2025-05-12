@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <title>Registration Home</title>
+
+        <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+
+              rel="stylesheet">
+
+    </head>
+
+
+<body>
+
+
+<!-- create navigation bar ( header) -->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="container">
+
+        <div class="navbar-header">
+
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar"
+
+                    data-toggle="collapse" type="button">
+
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span
+
+                    class="icon-bar"></span> <span class="icon-bar"></span>
+
+            </button>
+
+            <a class="navbar-brand" href="#" th:href="@{/accounts}">Accounts</a>
+
+            <a class="navbar-brand" href='/transfers' id="menu-link-transfer">Transfer</a>
+
+            <a class="navbar-brand" href='/statements' id="menu-link-statements">E-Statements</a>
+
+            <a class="navbar-brand" href='/invoices' id="menu-link-invoices">Invoices</a>
+
+            <a class="navbar-brand" href="/profile" id="menu-link-profile">Profile</a>
+
+            <a class="navbar-brand" href="/users" id="menu-link-users" th:if="${isAdmin}">Users</a>
+
+            <a class="navbar-brand" href="/logs" id="menu-link-monitoring" th:if="${isAdmin}">Monitoring</a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar">
+
+            <ul class="nav navbar-nav">
+
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<br>
+
+<br>
+
+
+<form ChangeUserActivityStatus action="@Url.Action("
+
+", "User", new {userId = Model.User.Id, status = false})" method="post" id="block-user-form">
+
+@Html.AntiForgeryToken()
+
+<div class="row">
+
+    <div class="col right">
+
+        <div class="input-field block-user-button">
+
+            <input class="btn right" id="block-user-btn-submit" type="submit"
+
+                   value="Block User"/>
+
+            @await Html.PartialAsync("ManageRoles.cshtml", Model)
+
+        </div>
+
+    </div>
+
+</div>
+
+</form>
+
+}
+
+else
+
+{
+
+<form ChangeUserActivityStatus action="@Url.Action("
+
+", "User", new {userId = Model.User.Id, status = true})" method="post">
+
+@Html.AntiForgeryToken()
+
+<div class="row">
+
+    <div class="col right">
+
+        <div class="input-field block-user-button">
+
+            <input class="btn right" id="unblock-user-btn-submit" type="submit"
+
+                   value="Unblock User"/>
+
+            @await Html.PartialAsync("ManageRoles.cshtml", Model)
+
+        </div>
+
+    </div>
+
+</div>
+
+</form>
+
+}
+
+</body>
+
+</html>

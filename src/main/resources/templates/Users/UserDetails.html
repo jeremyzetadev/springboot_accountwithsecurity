@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <title>Registration Home</title>
+
+        <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+
+              rel="stylesheet">
+
+    </head>
+
+
+<body>
+
+
+<!-- create navigation bar ( header) -->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="container">
+
+        <div class="navbar-header">
+
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar"
+
+                    data-toggle="collapse" type="button">
+
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span
+
+                    class="icon-bar"></span> <span class="icon-bar"></span>
+
+            </button>
+
+            <a class="navbar-brand" href="#" th:href="@{/accounts}">Accounts</a>
+
+            <a class="navbar-brand" href='/transfers' id="menu-link-transfer">Transfer</a>
+
+            <a class="navbar-brand" href='/statements' id="menu-link-statements">E-Statements</a>
+
+            <a class="navbar-brand" href='/invoices' id="menu-link-invoices">Invoices</a>
+
+            <a class="navbar-brand" href="/profile" id="menu-link-profile">Profile</a>
+
+            <a class="navbar-brand" href="/users" id="menu-link-users" th:if="${isAdmin}">Users</a>
+
+            <a class="navbar-brand" href="/logs" id="menu-link-monitoring" th:if="${isAdmin}">Monitoring</a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar">
+
+            <ul class="nav navbar-nav">
+
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<br>
+
+<br>
+
+
+
+<div></div>
+
+<div class="container" th:if="${usernotfound != null}">
+
+    <div class="panel z-depth-1 login-panel">
+
+        <div class="row">
+
+            <h3 class="form-title blue-text">User not found</h3>
+
+
+            <p>The requested user could not be found.</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="container" th:else>
+
+    <div class="row">
+
+        <div class="card-header teal">
+
+            <h2>User details</h2>
+
+        </div>
+
+        <table class="striped table table-hover">
+
+            <tr>
+
+                <td>Picture</td>
+
+                <td><img class="z-depth-4 circle" height="128" th:src="@{${'/img/' + user.profilePicture}}"
+
+                         width="128"/>
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>Email</td>
+
+                <td><span class="grey-text"><div th:text="${user.email}"></div></span></td>
+
+            </tr>
+
+            <tr>
+
+                <td>ID</td>
+
+                <td><span><div th:text="${user.id}"></div></span></td>
+
+            </tr>
+
+            <tr>
+
+                <td>Email:</td>
+
+                <td>
+
+                    <div th:text="${user.email}"></div>
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>Email Confirmed:</td>
+
+                <td>
+
+                    <div th:if="${user.emailConfirmed}">Yes</div>
+
+                    <div th:else>No</div>
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>Account Locked:</td>
+
+                <td>
+
+                    <div th:if="${user.isActive}">No</div>
+
+                    <div th:else>Yes</div>
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>Roles:</td>
+
+                <td>
+
+                    <div th:each="role : ${user.roles}">
+
+                        <span class="chip green lighten-5 green-text" th:text="${role}"></span>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+        <form enctype="multipart/form-data" method="post" th:action="@{/users/profile/upload}">
+
+            <input accept="image/*" name="image" type="file">
+
+            <div class="row">
+
+                <div class="input-field col s12">
+
+                    <input class="btn-small" id="upload-profile-pic-btn-submit" type="submit"
+
+                           value="Upload"/>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <div th:if="${msg}">
+
+            <p>Uploaded file!</p>
+
+        </div>
+
+
+        <th if="${isAdmin}">
+
+        <th include="Users/adminactions"></th>
+
+        </th>
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="container">
+
+    <div class="row main-row-with-y-margins">
+
+        <div asp-validation-summary="All" class="card-panel red lighten-1"></div>
+
+        <div class="panel z-depth-1 white border-radius-bottom" style="margin-top: 0;">
+
+            <div class="row">
+
+                <p>When setting a new password, please use at least 6 characters
+
+                    (upper- and lowercase, along with a digit). At least 1 character must be unique.
+
+                </p>
+
+            </div>
+
+            <div class="row">
+
+                <form method="post" th:action="@{/users/profile/changepassword}" th:object="${changepasswordrequest}">
+
+                    <div class="row">
+
+                        <div class="input-field col s12">
+
+                            <input asp-for="CurrentPassword" th:field="*{currentPassword}"/>
+
+                            <label asp-for="CurrentPassword">Current Password</label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="input-field col s12">
+
+                            <input asp-for="NewPassword" th:field="*{newPassword}"/>
+
+                            <label asp-for="NewPassword">New Password</label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="input-field col s12">
+
+                            <input asp-for="NewPasswordAgain" th:field="*{confirmNewPassword}"/>
+
+                            <label asp-for="NewPasswordAgain">New Password Again</label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="input-field col s12 no-margin-y">
+
+                        <input class="btn right" id="change-password-btn-submit" type="submit" value="Change Password"/>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

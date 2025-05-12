@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <title>Registration Home</title>
+
+        <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+
+              rel="stylesheet">
+
+    </head>
+
+
+<body>
+
+
+<!-- create navigation bar ( header) -->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="container">
+
+        <div class="navbar-header">
+
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar"
+
+                    data-toggle="collapse" type="button">
+
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span
+
+                    class="icon-bar"></span> <span class="icon-bar"></span>
+
+            </button>
+
+            <a class="navbar-brand" th:href="@{/accounts}">Accounts</a>
+
+            <a class="navbar-brand" href='/transfers' id="menu-link-transfer">Transfer</a>
+
+            <a class="navbar-brand" href='/statements' id="menu-link-statements">E-Statements</a>
+
+            <a class="navbar-brand" href='/invoices' id="menu-link-invoices">Invoices</a>
+
+            <a class="navbar-brand" href="/profile" id="menu-link-profile">Profile</a>
+
+            <a class="navbar-brand" href="/users" id="menu-link-users" th:if="${isAdmin}">Users</a>
+
+            <a class="navbar-brand" href="/logs" id="menu-link-monitoring" th:if="${isAdmin}">Monitoring</a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar">
+
+            <ul class="nav navbar-nav">
+
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<br>
+
+<br>
+
+
+<div class="container">
+
+    <div class="row">
+
+        <h3>E-Statements</h3>
+
+        <div class="panel z-depth-1 white prevent-overflow border-radius-bottom" style="margin-top: 0;">
+
+            <div class="container" th:if="${statementnotfound}">
+
+                <div class="panel z-depth-1 login-panel">
+
+                    <div class="row">
+
+                        <h3 class="form-title blue-text">No statements found</h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <table class="striped table table-hover">
+
+                <thead class="thead-light">
+
+                <tr>
+
+                    <th data-field="timestamp" scope="col">Timestamp</th>
+
+                    <th data-field="description" scope="col">Description</th>
+
+                    <th data-field="amount" scope="col">Amount</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                <tr th:each="transaction : ${transactions}">
+
+                    <td th:text="${transaction.timestamp}"></td>
+
+                    <td th:text="${transaction.transactionType}"></td>
+
+                    <td th:text="${transaction.amount}"></td>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+            <a th:href="@{/statements/download/{id}(id=${statement_id})}">
+
+                Download statement
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<th insert="Shared/footer.html"></th>

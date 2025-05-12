@@ -1,0 +1,12 @@
+@model AccountSystem.Models.UserDetailsViewModel
+
+@{
+
+ViewData["Title"] = "Profile";
+
+}
+
+
+@await Html.PartialAsync("/Views/Users/UserDetails.cshtml", Model)
+
+@await Html.PartialAsync("ChangePassword", new ChangePasswordViewModel())
